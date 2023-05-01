@@ -7,10 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="bootstrap" Version="5.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FruitSA_Dev_Test.API\FruitSA_Dev_Test.API.csproj" />
+    <ProjectReference Include="..\FruitSA_Dev_Test.BLL\FruitSA_Dev_Test.BLL.csproj" />
+    <ProjectReference Include="..\FruitSA_Dev_Test.DAL\FruitSA_Dev_Test.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Product\" />
   </ItemGroup>
 
 </Project>

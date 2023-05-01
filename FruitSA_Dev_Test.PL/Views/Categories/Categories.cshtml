@@ -1,0 +1,81 @@
+﻿@model FruitSA_Dev_Test.DAL.Models.Category
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+
+<h3>Categories List</h3>
+
+<a class="btn btn-secondary" href="CreateUpdateCategory/0">New Category</a>
+
+<table class="table table-bg table-striped" id="table">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col" >ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Category Code</th>
+                <th scope="col">Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="table_body">
+        </tbody>
+    </table>
+
+<script>
+    $(document).ready(function () {
+        var bearer_token = localStorage.getItem("FruitsKey");
+        var bearer = 'Bearer ' + bearer_token;
+    fetch("https://localhost:7252/api/Category/GetCategories",
+    {
+    method: 'GET',
+    headers: {
+    'Authorization': bearer,
+    }
+    }
+    )
+    .then((data) => {
+        if(data.status!==200)
+       {
+           window.location.href = "/Login/Login";
+       }
+        return data.json();
+        })
+    .then((categories) => {
+            let tableData = "";
+            categories.map((values) => {
+                tableData +=
+                `<tr>
+                    <td id="catId">${values.categoryId}</td>
+                    <td>${values.name}</td>
+                    <td>${values.categoryCode}</td>
+                    <td>${values.isActive}</td>
+                    <td>
+                       <a class="btn btn-secondary" href="CreateUpdateCategory/${values.categoryId}">Edit</a>
+                    </td>
+                </tr>`;
+            });
+            document.getElementById("table_body").innerHTML = tableData;
+            
+    $('#table').DataTable({
+    dom: 'lBfrtip',
+        buttons: [
+            'excel'
+        ],
+    })
+    .catch(function(error)
+    {
+      alert("Error");
+    });
+
+    });
+    
+});
+</script>
+
+<style>
+    .table {
+        margin-top: 20px;
+    }
+</style>

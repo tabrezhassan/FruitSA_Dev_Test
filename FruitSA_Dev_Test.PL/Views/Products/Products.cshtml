@@ -1,0 +1,58 @@
+﻿@model FruitSA_Dev_Test.DAL.Models.Category
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+
+<h3>Products List</h3>
+
+<a class="btn btn-secondary" asp-area="" asp-controller="Products" asp-action="CreateProduct">New Product</a>
+
+<table class="table table-bg table-striped" id="table">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col" >ID</th>
+                <th scope="col">Product Code</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price</th>
+                <th scope="col">Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="table_body">
+        </tbody>
+    </table>
+
+<script>
+    fetch("https://localhost:7252/api/Product/GetProducts").then((data) => {
+        return data.json();
+        }).then((products) => {
+            console.log(products);
+            let tableData = "";
+            products.map((values) => {
+                tableData +=
+                `<tr>
+                    <td id="catId">${values.prouctId}</td>
+                    <td>${values.productCode}</td>
+                    <td>${values.name}</td>
+                    <td>${values.description}</td>
+                    <td>${values.category}</td>
+                    <td>${values.price}</td>
+                    <td>${values.image}</td>
+                    <td>
+                       <a class="btn btn-secondary" asp-area="" asp-controller="Products" asp-action="EditProduct">Edit</a>
+                    </td>
+                </tr>`;
+            });
+            document.getElementById("table_body").innerHTML = tableData;
+    });
+</script>
+
+<style>
+    .table {
+        margin-top: 20px;
+    }
+</style>

@@ -14,15 +14,24 @@ namespace FruitSA_Dev_Test.DAL.Models
     {
         [Key]
         public string ProductId { get; set; } = string.Empty;
+
+        [Required]
         public string ProductCode { get; set; } = string.Empty;
+
+        [Required]
         public string Name { get; set; } = string.Empty;
+
         public string? Description { get; set; }
+
+        [Required]
         public string CategoryName { get; set; } = string.Empty;
 
         [Column(TypeName ="decimal(18,2)")]
+        [Required]
         public decimal Price { get; set; }
-        public byte[]  Image { get; set; } = new byte[0];
 
-        public virtual Category Category { get; set; }
+        public string?  Image { get; set; }
+
+       
     }
 }
