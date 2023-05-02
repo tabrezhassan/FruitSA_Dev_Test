@@ -12,6 +12,8 @@ Project has been created using the following technologies
   
   5. N-Tier
   
+  6. jQuery Datatables
+  
  Application manages the creation of categories and products.
  
  Set Up
