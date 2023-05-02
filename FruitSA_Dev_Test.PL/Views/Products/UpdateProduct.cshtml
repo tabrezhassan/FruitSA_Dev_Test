@@ -1,0 +1,191 @@
+﻿@model FruitSA_Dev_Test.DAL.Models.Product
+
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Create Product</title>
+</head>
+<body>
+
+    <form id="newProduct" method="post">
+        <div class="row justify-content-center">
+            <div class="card">
+                <div class="card-header"> <h2>Create new Product</h2></div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="categoryId" class="form-label">Product Id</label>
+                        <input type="text" class="form-control" id="productId" name="productId" placeholder="Product Id" value="@Model.ProductId">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">Product Code</label>
+                        <input type="text" class="form-control" id="productCode" name="productCode" placeholder="Product Code">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryCode" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Product Name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryCode" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" placeholder="Product Description">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryCode" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" name="categoryName" placeholder="Category">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryCode" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryCode" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="productImage" name="productImage" placeholder="Image">
+                        <img id="imgPreview" src="#" alt=""/>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="col-md-2">
+                        <input class="btn btn-success" type="submit" value="Save" />
+                        <a class="btn btn-danger" href="/Products/Products">Cancel</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+</body>
+
+</html>
+<script>
+
+    
+        
+
+    var productId = @Model.ProductId;
+                $(document).ready(function () 
+                {
+                    var bearer_token = localStorage.getItem("FruitsKey");
+                    var bearer = 'Bearer ' + bearer_token;
+            
+                    fetch(`https://localhost:7252/api/Product/GetProduct/${productId}`,
+                        {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': bearer,
+                            }
+                        }
+                    )
+                        .then((data) => {
+                            if (data.status !== 200) {
+                                window.location.href = "/Login/Login";
+                            }
+                            return data.json();
+                        })
+                    .then((product) => {
+                    document.getElementById('productId').value = product.productId;
+                    document.getElementById('productCode').value = product.productCode;
+                    document.getElementById('name').value = product.name;
+                    document.getElementById('description').value = product.description;
+                    document.getElementById('categoryName').value = product.categoryName;
+                    document.getElementById('price').value = product.price;
+                    document.getElementById('imgPreview').src = product.image;
+                    });
+            });
+            
+
+            //SETS THUMBNAIL OF SELECTED IMAGE
+            productImage.onchange = evt => 
+            {
+                const [file] = productImage.files
+                if (file) 
+                {
+                    imgPreview.src = URL.createObjectURL(file)
+                }
+            }
+
+    const form = document.getElementById('newProduct');
+
+    //POST REQUEST
+    
+    newProduct.addEventListener('submit', function (e) {
+        e.preventDefault();
+        
+        const products = new FormData(form);
+        var productId = document.getElementById('productId').value;
+        var productCode = document.getElementById('productCode').value;
+        var name = document.getElementById('name').value;
+        var description = document.getElementById('description').value;
+        var categoryName = document.getElementById('categoryName').value;
+        var price = document.getElementById('price').value;
+        
+        var fileBase64 = "";
+
+        var fileData = document.getElementById('productImage').files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(fileData);
+        reader.onload = function () {
+            fileBase64 = reader.result;
+
+            var imageBytes = fileBase64;
+
+            $(document).ready(function () {
+                var bearer_token = localStorage.getItem("FruitsKey");
+                var bearer = 'Bearer ' + bearer_token;
+
+                fetch('https://localhost:7252/api/Product/UpdateProduct',
+                    {
+                        method: "PUT",
+                        body: JSON.stringify
+                            ({
+                                productId: productId,
+                                productCode: productCode,
+                                name: name,
+                                description: description,
+                                categoryName: categoryName,
+                                price: price,
+                                image: imageBytes
+                            }),
+                        headers:
+                        {
+                            'Authorization': bearer,
+                            'Content-type': 'application/json; charset=UTF-8',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(error => console.log(error))
+            })
+        };
+    });
+</script>
+
+
+
+<style>
+    .card {
+        width: 900px;
+        background-color: white;
+        margin-top: 50px;
+    }
+
+    .card-header {
+        background-color: white;
+    }
+
+    .card-footer {
+        background-color: white;
+    }
+</style>

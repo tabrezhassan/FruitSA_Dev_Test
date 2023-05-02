@@ -41,7 +41,7 @@
                 <div class="card-footer">
                     <div class="col-md-6">
                         <input class="btn btn-primary" type="submit" value="Update" />
-                        <a href="/pages/Categories/Categories.html" class="btn btn-danger">Cancel</a>
+                        <a href="/Categories/Categories" class="btn btn-danger">Cancel</a>
                     </div>
                 </div>
             </div>
@@ -55,28 +55,34 @@
 </html>
 <script>
 
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-    integrity =
-        "sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
-    crossorigin = "anonymous"
+    
 
     var categoryId = @Model.CategoryId;
-    //localStorage.removeItem('categoryId');
-    if (categoryId>0)
-    {
-        fetch(`https://localhost:7252/api/Category/GetCategories/${categoryId}`).then((data) => {
-            return data.json();
-        }).then((categories) => {
-            document.getElementById("categoryId").value = categories.categoryId;
-            document.getElementById("name").value = categories.name
-            document.getElementById("categoryCode").value = categories.categoryCode
-            document.getElementById("isActive").checked = categories.isActive 
-            });
-    }
-    else
-    {
-        document.getElementById("categoryId").value = 0;
-    }
+    $(document).ready(function () {
+        var bearer_token = localStorage.getItem("FruitsKey");
+        var bearer = 'Bearer ' + bearer_token;
+            if (categoryId>0)
+            {
+                fetch(`https://localhost:7252/api/Category/GetCategories/${categoryId}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                        'Authorization': bearer,
+                    }
+                }).then((data) => {
+                    return data.json();
+                }).then((categories) => {
+                    document.getElementById("categoryId").value = categories.categoryId;
+                    document.getElementById("name").value = categories.name
+                    document.getElementById("categoryCode").value = categories.categoryCode
+                    document.getElementById("isActive").checked = categories.isActive 
+                    });
+            }
+            else
+            {
+                document.getElementById("categoryId").value = 0;
+            }
+         });
 
     const form = document.getElementById('editCategory');
 
@@ -93,7 +99,11 @@
 
         console.log(categories);
 
-        fetch('https://localhost:7252/api/Category/UpdateCategory', {
+        $(document).ready(function () {
+            var bearer_token = localStorage.getItem("FruitsKey");
+            var bearer = 'Bearer ' + bearer_token;
+
+        fetch('https://localhost:7252/api/Category/CreateUpdateCategory', {
             method: "PUT",
             body: JSON.stringify({
                 categoryId: catid,
@@ -102,6 +112,7 @@
                 isActive: isActive
             }),
             headers: {
+                    'Authorization': bearer,
                 'Content-type': 'application/json; charset=UTF-8',
             }
 
@@ -109,6 +120,7 @@
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.log(error))
+            })
 
     })
 

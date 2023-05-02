@@ -5,11 +5,12 @@ using FruitSA_Dev_Test.DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace FruitSA_Dev_Test.API.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -39,7 +40,7 @@ namespace FruitSA_Dev_Test.API.Controllers
 
         [HttpPost]
         [Route("CreateProduct")]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public async Task<IActionResult> CreateUpdateProduct(Product product)
         {
             if (product.ProductCode.All(c => !Char.IsLetterOrDigit(c)))
             {
@@ -68,23 +69,13 @@ namespace FruitSA_Dev_Test.API.Controllers
                 CategoryName = product.CategoryName,
                 Price = product.Price,
                 Image = product.Image
-
-            //    foreach (var item in image)
-            //{
-            //    if (item.Length > 0)
-            //    {
-            //        using (var stream = new MemoryStream())
-            //        {
-            //            await item.CopyToAsync(stream);
-            //            product.Image = stream.ToArray();
-            //        }
-            //    }
-            //}
-        };   
-
+        };
             await _productService.CreateCategory(newproduct);
             return Ok(newproduct);
         }
+
+
+
 
         [HttpPut]
         [Route("UpdateProduct")]

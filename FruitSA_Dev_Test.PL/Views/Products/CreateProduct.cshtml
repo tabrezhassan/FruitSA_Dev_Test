@@ -55,7 +55,7 @@
                     <div class="card-footer">
                         <div class="col-md-2">
                             <input class="btn btn-success" type="submit" value="Save" />
-                            <a class="btn btn-danger" asp-area="" asp-controller="Categories" asp-action="Categories">Cancel</a>
+                        <a class="btn btn-danger" href="/Products/Products">Cancel</a>
 
                         </div>
                     </div>
@@ -69,16 +69,11 @@
 
 </html>
 <script>
-    
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-    integrity =
-        "sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
-    crossorigin = "anonymous"
-        
 
     const form = document.getElementById('newProduct');
 
-    newProduct.addEventListener('submit', function (e) {
+    newProduct.addEventListener('submit', function (e) 
+    {
         e.preventDefault();
 
         const products = new FormData(form);
@@ -91,33 +86,47 @@
         var fileBase64 = "";
 
         var fileData = document.getElementById('productImage').files[0];
-           var reader = new FileReader();
-               reader.readAsDataURL(fileData);
-               reader.onload = function () {
-                 fileBase64 = reader.result;
-                 
-                var imageBytes = fileBase64;
+        var reader = new FileReader();
+        reader.readAsDataURL(fileData);
+        reader.onload = function () 
+        {
+            fileBase64 = reader.result;
 
-                fetch('https://localhost:7252/api/Product/CreateProduct', {
-                             method: "POST",
-                            body: JSON.stringify({
-                            productId: productId,
-                            productCode: productCode,
-                            name: name,
-                            description: description,
-                            categoryName : categoryName,
-                            price: price,
-                            image: imageBytes
-                    }),
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    }
-                })
+            var imageBytes = fileBase64;
+
+            $(document).ready(function () {
+                var bearer_token = localStorage.getItem("FruitsKey");
+                var bearer = 'Bearer ' + bearer_token;
+
+                fetch('https://localhost:7252/api/Product/CreateProduct',
+                    {
+                        method: "POST",
+                        body: JSON.stringify
+                            ({
+                                productId: productId,
+                                productCode: productCode,
+                                name: name,
+                                description: description,
+                                categoryName: categoryName,
+                                price: price,
+                                image: imageBytes
+                            }),
+                        headers:
+                        {
+                            'Authorization': bearer,
+                            'Content-type': 'application/json; charset=UTF-8',
+                        }
+                    })
                     .then(response => response.json())
                     .then(data => console.log(data))
                     .catch(error => console.log(error))
-               };
+            })
+        };
     });
+                
+                   
+    
+
 </script>
 
 

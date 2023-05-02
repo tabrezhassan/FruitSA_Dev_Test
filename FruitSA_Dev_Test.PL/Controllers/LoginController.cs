@@ -8,5 +8,10 @@ namespace FruitSA_Dev_Test.PL.Controllers
         {
             return View();
         }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
     }
 }
